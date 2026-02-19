@@ -1,6 +1,5 @@
-# You can edit all these variables to customize your installation
+# All these variables can be edited to customize your installation.
 
-VERSION="1.3.0" # Please make sure this is the latest release available. I wont update the script every time.
 INSTALL_PATH="$HOME/.local/bin/"
 FILE="Stoat-linux-x64-$VERSION.zip"
 RELEASE_URL="https://github.com/stoatchat/for-desktop/releases/download/v$VERSION/Stoat-linux-x64-$VERSION.zip"
@@ -8,13 +7,18 @@ ICON_URL="https://raw.githubusercontent.com/stoatchat/assets/refs/heads/main/des
 ICON_PATH="$INSTALL_PATH/Stoat-linux-x64/icon.ico"
 DESKTOP_FILE="$HOME/.local/share/applications/stoat.desktop"
 
-# Do not edit this unless you know what you are doing
+# Don't touch anything below here unelss you know what you are doing
 
-echo "Welcome to this basic Stoat install/update script for linux."
+echo "Hello, and welcome to this basic Stoat install/update script for Linux."
+echo "Please wait while script finds the latest release version..."
+VERSION=$(searchitem=$(curl -v https://github.com/stoatchat/for-desktop 2>&1 | grep -E '\<span\sclass\=\"css-truncate\scss\-truncate-target\stext-bold\smr-2"\sstyle=\"max-width\:\snone\;\">v([0-9]\.[0-9]+\.[0-9]+)<\/span\>'); grep -Po '([0-9]\.[0-9]+\.[0-9]+)' <<< $searchitem)
+if ! [[ "$VERSION" =~ [0-9]\.[0-9]+\.[0-9]+ ]]; then
+    echo "Version get failed."
+    echo "Exiting..."
+    exit
+fi
+echo "Version $VERSION was automatically detected as the latest release. It will be downloaded and installed / updated."
 echo "Be sure to have chromium and all the required dependencies installed before proceeding."
-echo ""
-echo "Version $VERSION will be downloaded and installed / updated. This can be changed in the beginning of the script."
-echo "Please check for new versions at https://github.com/stoatchat/for-desktop/releases/"
 echo ""
 read -sp "Continue ? (Y/n): " ask
 if [ "$ask" = "n" ]; then
@@ -24,7 +28,7 @@ fi
 output=""
 wget -O $FILE $RELEASE_URL && echo "Downloaded $FILE" && output="success" || output="failed"
 if [ "$output" != "success" ]; then
-    echo "Download failed. Check for release version or contact me for a fix."
+    echo "Download failed. Check for release version or create an issue in the repo."
     rm -rf $FILE
     echo "Exiting..."
     exit
@@ -46,4 +50,4 @@ echo "Categories=Network;InstantMessaging;" >> $DESKTOP_FILE
 echo "Terminal=false" >> $DESKTOP_FILE
 echo "Keywords=Chat;Messaging;Stoat;" >> $DESKTOP_FILE
 echo ""
-echo "Installation/update complete. You can now launch Stoat."
+echo "Installation complete. You can now launch Stoat. You can also use this script to update the application by running the script again when there is a new release."
