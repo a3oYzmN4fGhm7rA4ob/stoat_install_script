@@ -44,7 +44,11 @@ if [ "$output" != "success" ]; then
     exit
 fi
 echo "Downloaded $FILE successfully."
+echo "Unzipping $FILE."
 unzip -o $FILE -d $INSTALL_PATH
+echo "Adjusting chrome-sandbox permissions. Sudo may be required."
+sudo chown root "$INSTALL_PATH/Stoat_linux_x64/chrome-sandbox"
+sudo chmod 4755 "$INSTALL_PATH/Stoat_linux_x64/chrome-sandbox"
 echo "Version $VERSION installed."
 echo "Downloading icon..."
 wget -O $ICON_PATH $ICON_URL
