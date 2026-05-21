@@ -36,7 +36,7 @@ if [ "$ask" = "n" ]; then
     echo "Exiting."
     exit
 fi
-wget -O $FILE $RELEASE_URL && echo "Downloaded $FILE" && output="success" || output="failed"
+wget -O $FILE $RELEASE_URL && output="success" || output="failed"
 if [ "$output" != "success" ]; then
     echo "Download failed. Check for release version or create an issue in the repo."
     rm -rf $FILE
